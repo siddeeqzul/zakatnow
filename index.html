@@ -109,9 +109,9 @@
 </head>
 <body>
     <div class="container">
-            <header>
-        <img src="logo zakat now-01.png" alt="Zakat Now" class="logo">
-    </header>
+        <header>
+            <img src="logo zakat now-01.png" alt="Zakat Now" class="logo">
+        </header>
         <h2 class="center">Kira Zakat Anda</h2>
         <div class="form-group">
             <label for="state">Negeri:</label>
@@ -170,7 +170,7 @@
         </div>
         <button onclick="calculateZakat()" class="btn btn-green">Kira Zakat</button>
         <button onclick="resetForm()" class="btn hidden" id="resetButton" style="background-color: #dc3545; margin-left: 10px;">Ulang</button>
-        <div class="result" id="result"></div>
+        <div class="result hidden" id="result"></div>
         <div class="center">
             <button onclick="zakatNow()" class="btn hidden" id="zakatNowButton" style="background-color: #28a745; margin-top: 20px;">ZakatNOW</button>
         </div>
@@ -234,6 +234,7 @@
             } else {
                 document.getElementById('result').innerHTML = `Jumlah Zakat anda untuk ${state} adalah RM ${zakat.toFixed(2)}`;
             }
+            document.getElementById('result').classList.remove('hidden');
             document.getElementById('resetButton').classList.remove('hidden');
             document.getElementById('zakatNowButton').classList.remove('hidden');
         }
@@ -247,6 +248,7 @@
             document.getElementById('takaful').value = '';
             document.getElementById('totalDeductions').value = '';
             document.getElementById('result').innerHTML = '';
+            document.getElementById('result').classList.add('hidden');
             document.getElementById('wives-count').textContent = '0';
             document.getElementById('children-count').textContent = '0';
             document.getElementById('resetButton').classList.add('hidden');

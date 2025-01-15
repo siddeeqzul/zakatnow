@@ -151,7 +151,7 @@
                 <label for="parentSupport">Sumbangan Ibu Bapa (RM):</label>
                 <input type="number" id="parentSupport" placeholder="Masukkan jumlah sumbangan ibu bapa">
             </div>
-            <div class="form-group">
+            <div class="form-group" id="kwsp-group" style="display: none;">
                 <label for="kwsp">KWSP (RM):</label>
                 <input type="number" id="kwsp" readonly>
             </div>
@@ -176,12 +176,13 @@
         </div>
     </div>
     <footer>
-        Powered by <strong>UNITI Waqi</strong>
+        &copy; 2025 Powered by <strong>UNITI Waqi</strong>
     </footer>
     <script>
         function toggleDeductions(show) {
             const section = document.getElementById('deductions-section');
             section.style.display = show ? 'block' : 'none';
+            calculateTotalDeductions();
         }
 
         function changeCount(id, delta) {
@@ -194,8 +195,14 @@
 
         function calculateTotalDeductions() {
             const income = parseFloat(document.getElementById('income').value) || 0;
-            const kwsp = income * 0.11;
-            document.getElementById('kwsp').value = kwsp.toFixed(2);
+            const deductionsSection = document.getElementById('deductions-section');
+            let kwsp = 0;
+            if (deductionsSection.style.display !== 'none') {
+                kwsp = income * 0.11;
+                document.getElementById('kwsp').value = kwsp.toFixed(2);
+            } else {
+                document.getElementById('kwsp').value = '';
+            }
 
             const wives = parseInt(document.getElementById('wives-count').textContent) || 0;
             const children = parseInt(document.getElementById('children-count').textContent) || 0;

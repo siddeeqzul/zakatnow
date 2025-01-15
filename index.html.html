@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Zakat</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .logo {
+            width: 200px;
+            height: auto;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-green {
+            background-color: #28a745;
+        }
+        .btn-green:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #e9f7ef;
+            color: #333;
+        }
+        header, footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+        .addon-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .addon-buttons button {
+            width: auto;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .addon-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .addon-buttons span {
+            font-size: 18px;
+            margin: 0 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+            <header>
+        <img src="logo zakat now-01.png" alt="Zakat Now" class="logo">
+    </header>
+        <h2 class="center">Kira Zakat Anda</h2>
+        <div class="form-group">
+            <label for="state">Negeri:</label>
+            <select id="state">
+                <option value="Negeri Sembilan">Negeri Sembilan</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="income">Pendapatan Tahunan (RM):</label>
+            <input type="number" id="income" placeholder="Masukkan pendapatan tahunan anda">
+        </div>
+        <div class="form-group">
+            <label style="text-align: center; display: block;">Adakah anda ingin memasukkan perbelanjaan?</label>
+            <div class="addon-buttons">
+                <button onclick="toggleDeductions(true)">Ya</button>
+                <button onclick="toggleDeductions(false)">Tidak</button>
+            </div>
+        </div>
+        <div id="deductions-section" style="display: none;">
+            <div class="form-group">
+                <label>Bilangan Isteri:</label>
+                <div class="addon-buttons">
+                    <button onclick="changeCount('wives', -1)">-</button>
+                    <span id="wives-count">0</span>
+                    <button onclick="changeCount('wives', 1)">+</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Bilangan Anak:</label>
+                <div class="addon-buttons">
+                    <button onclick="changeCount('children', -1)">-</button>
+                    <span id="children-count">0</span>
+                    <button onclick="changeCount('children', 1)">+</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="parentSupport">Sumbangan Ibu Bapa (RM):</label>
+                <input type="number" id="parentSupport" placeholder="Masukkan jumlah sumbangan ibu bapa">
+            </div>
+            <div class="form-group">
+                <label for="kwsp">KWSP (RM):</label>
+                <input type="number" id="kwsp" readonly>
+            </div>
+            <div class="form-group">
+                <label for="tabungHaji">Simpanan Tabung Haji (RM):</label>
+                <input type="number" id="tabungHaji" placeholder="Masukkan jumlah simpanan Tabung Haji">
+            </div>
+            <div class="form-group">
+                <label for="takaful">Takaful (RM):</label>
+                <input type="number" id="takaful" placeholder="Masukkan jumlah Takaful">
+            </div>
+            <div class="form-group">
+                <label for="totalDeductions">Jumlah Perbelanjaan (RM):</label>
+                <input type="number" id="totalDeductions" readonly>
+            </div>
+        </div>
+        <button onclick="calculateZakat()" class="btn btn-green">Kira Zakat</button>
+        <button onclick="resetForm()" class="btn hidden" id="resetButton" style="background-color: #dc3545; margin-left: 10px;">Ulang</button>
+        <div class="result" id="result"></div>
+        <div class="center">
+            <button onclick="zakatNow()" class="btn hidden" id="zakatNowButton" style="background-color: #28a745; margin-top: 20px;">ZakatNOW</button>
+        </div>
+    </div>
+    <footer>
+        Powered by <strong>UNITI Waqi</strong>
+    </footer>
+    <script>
+        function toggleDeductions(show) {
+            const section = document.getElementById('deductions-section');
+            section.style.display = show ? 'block' : 'none';
+        }
+
+        function changeCount(id, delta) {
+            const countElement = document.getElementById(`${id}-count`);
+            let count = parseInt(countElement.textContent) || 0;
+            count = Math.max(0, count + delta);
+            countElement.textContent = count;
+            calculateTotalDeductions();
+        }
+
+        function calculateTotalDeductions() {
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const kwsp = income * 0.11;
+            document.getElementById('kwsp').value = kwsp.toFixed(2);
+
+            const wives = parseInt(document.getElementById('wives-count').textContent) || 0;
+            const children = parseInt(document.getElementById('children-count').textContent) || 0;
+            const parentSupport = parseFloat(document.getElementById('parentSupport').value) || 0;
+            const tabungHaji = parseFloat(document.getElementById('tabungHaji').value) || 0;
+            const takaful = parseFloat(document.getElementById('takaful').value) || 0;
+            const wifeDeduction = 4000; // Contoh perbelanjaan per isteri
+            const childDeduction = 2000; // Contoh perbelanjaan per anak
+
+            const totalDeductions = (wives * wifeDeduction) + (children * childDeduction) + parentSupport + kwsp + tabungHaji + takaful;
+            document.getElementById('totalDeductions').value = totalDeductions.toFixed(2);
+        }
+
+        function calculateZakat() {
+            const state = document.getElementById('state').value;
+            const income = parseFloat(document.getElementById('income').value);
+            const wives = parseInt(document.getElementById('wives-count').textContent) || 0;
+            const children = parseInt(document.getElementById('children-count').textContent) || 0;
+            const parentSupport = parseFloat(document.getElementById('parentSupport').value) || 0;
+            const kwsp = parseFloat(document.getElementById('kwsp').value) || 0;
+            const tabungHaji = parseFloat(document.getElementById('tabungHaji').value) || 0;
+            const takaful = parseFloat(document.getElementById('takaful').value) || 0;
+            const zakatRate = 0.025; // 2.5%
+            const wifeDeduction = 4000; // Contoh perbelanjaan per isteri
+            const childDeduction = 2000; // Contoh perbelanjaan per anak
+
+            if (isNaN(income)) {
+                alert('Sila masukkan nombor yang sah untuk pendapatan.');
+                return;
+            }
+
+            const totalDeductions = (wives * wifeDeduction) + (children * childDeduction) + parentSupport + kwsp + tabungHaji + takaful;
+            const zakat = (income - totalDeductions) * zakatRate;
+            if (zakat <= 0) {
+                document.getElementById('result').innerHTML = 'Anda Tidak Layak Untuk Membayar Zakat';
+            } else {
+                document.getElementById('result').innerHTML = `Jumlah Zakat anda untuk ${state} adalah RM ${zakat.toFixed(2)}`;
+            }
+            document.getElementById('resetButton').classList.remove('hidden');
+            document.getElementById('zakatNowButton').classList.remove('hidden');
+        }
+
+        function resetForm() {
+            document.getElementById('state').value = 'Negeri Sembilan';
+            document.getElementById('income').value = '';
+            document.getElementById('parentSupport').value = '';
+            document.getElementById('kwsp').value = '';
+            document.getElementById('tabungHaji').value = '';
+            document.getElementById('takaful').value = '';
+            document.getElementById('totalDeductions').value = '';
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('wives-count').textContent = '0';
+            document.getElementById('children-count').textContent = '0';
+            document.getElementById('resetButton').classList.add('hidden');
+            document.getElementById('zakatNowButton').classList.add('hidden');
+        }
+
+        function zakatNow() {
+            alert('ZakatNOW button clicked!');
+        }
+
+        document.getElementById('income').addEventListener('input', calculateTotalDeductions);
+        document.getElementById('parentSupport').addEventListener('input', calculateTotalDeductions);
+        document.getElementById('tabungHaji').addEventListener('input', calculateTotalDeductions);
+        document.getElementById('takaful').addEventListener('input', calculateTotalDeductions);
+    </script>
+</body>
+</html>
